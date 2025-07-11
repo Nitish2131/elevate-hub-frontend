@@ -6,26 +6,30 @@ const BookingPages = () => {
   const { username, serviceId } = useParams();
   const navigate = useNavigate();
 
-  // 🔹 Hardcoded availability for debugging
   const hardcodedAvailability = {
-    sunday: [{ startTime: "10:00", endTime: "11:00" }, { startTime: "14:00", endTime: "15:00" }],
+    sunday: [
+      { startTime: "10:00", endTime: "11:00" },
+      { startTime: "14:00", endTime: "15:00" },
+    ],
     monday: [{ startTime: "09:00", endTime: "10:00" }],
   };
 
-  const [availability, setAvailability] = useState(hardcodedAvailability); // Default to hardcoded
-  const [service, setService] = useState({ price: 1 }); // Mock service data, replace with actual API call
+  const [availability, setAvailability] = useState(hardcodedAvailability);
+  const [service] = useState({ price: 1 }); // 🔧 Removed unused setService
 
   useEffect(() => {
     const fetchAvailability = async () => {
       try {
-        const response = await AxiosInstances.get(`/availability/${username}?durationInMinutes=60`);
-        
-        console.log("🚀 Full API Response:", response.data); // Log entire response
+        const response = await AxiosInstances.get(
+          `/availability/${username}?durationInMinutes=60`
+        );
+
+        console.log("🚀 Full API Response:", response.data);
 
         if (response.data?.availability?.weeklyAvailability) {
           setAvailability(response.data.availability.weeklyAvailability);
         } else {
-          console.warn("❌ No 'weeklyAvailability' found in API response. Using hardcoded data.");
+          console.warn("❌ No 'weeklyAvailability' found. Using hardcoded data.");
         }
       } catch (error) {
         console.error("❌ Error fetching availability:", error?.response?.data || error);

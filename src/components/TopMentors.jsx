@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import MentorCard from "./MentorCard";
 import mentorAPI from "../apiManger/mentor";
 import useMentorStore from "../store/mentors";
@@ -11,40 +11,38 @@ const TopMentors = () => {
   const [loading, setLoading] = useState(false);
 
   // Function to get 4 random mentors from the array
-  const selectTopMentors = (mentors) => {
+  const selectTopMentors = useCallback((mentors) => {
     const selected = [];
     const totalMentors = mentors.length;
 
     while (selected.length < 4 && selected.length < totalMentors) {
-      const randomIndex = Math.floor(Math.random() * totalMentors); // Get random index
+      const randomIndex = Math.floor(Math.random() * totalMentors);
       const randomMentor = mentors[randomIndex];
 
-      // Check if the random mentor has already been selected
       if (!selected.includes(randomMentor)) {
-        selected.push(randomMentor); // Add unique mentor
+        selected.push(randomMentor);
       }
     }
-    return selected; // Return the selected mentors
-  };
+    return selected;
+  }, []);
 
-  const fetchAllMentors = async () => {
+  const fetchAllMentors = useCallback(async () => {
     setLoading(true);
     try {
       const response = await mentorAPI.getAllMentors();
       const allMentors = response?.data?.mentors || [];
-      setMentorsData(allMentors); // Store all mentors
-
-      setTopMentors(selectTopMentors(allMentors)); // Set 4 random mentors directly from the API response
+      setMentorsData(allMentors);
+      setTopMentors(selectTopMentors(allMentors));
     } catch (error) {
       console.error("Error fetching mentors:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [setMentorsData, selectTopMentors]);
 
   useEffect(() => {
     fetchAllMentors();
-  }, []);
+  }, [fetchAllMentors]);
 
   return (
     <div className="container mx-auto my-10">
@@ -57,19 +55,18 @@ const TopMentors = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
-          {topMentors.map((mentor) => {
-            return <MentorCard mentor={mentor} key={mentor?._id} />;
-          })}
+          {topMentors.map((mentor) => (
+            <MentorCard mentor={mentor} key={mentor?._id} />
+          ))}
         </div>
       )}
       <div className="mt-8 text-center">
-        {/* Redesigned button */}
         <NavLink to="/mentors">
           <Button
             type="default"
             style={{
-              background: "linear-gradient(135deg, #d4f8e8, #b0f2c2)", // Light green gradient
-              color: "#1b5e20", // Dark green text
+              background: "linear-gradient(135deg, #d4f8e8, #b0f2c2)",
+              color: "#1b5e20",
               padding: "12px 20px",
               fontSize: "1rem",
               fontWeight: "bold",

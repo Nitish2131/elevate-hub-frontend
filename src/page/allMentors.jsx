@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Spin } from "antd"; // Import the Spin component from antd
+import { Spin } from "antd";
 import useMentorStore from "../store/mentors";
 import MentorCard from "../components/MentorCard";
 import mentorAPI from "../apiManger/mentor";
-import DashboardNavbar from "../components/DashboardNavbar";
 import Layout from "../components/Layout";
 
 const AllMentors = () => {
   const { mentorsData, setMentorsData } = useMentorStore();
-  const [loading, setLoading] = useState(false); // State for tracking loading status
+  const [loading, setLoading] = useState(false);
 
-  // Fetch mentors when the component mounts if mentorsData is empty
   useEffect(() => {
     const fetchAllMentors = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const response = await mentorAPI.getAllMentors();
         const allMentors = response?.data?.mentors || [];
-        setMentorsData(allMentors); // Store all mentors in the Zustand store
+        setMentorsData(allMentors);
       } catch (error) {
         console.error("Error fetching mentors:", error);
       } finally {
-        setLoading(false); // Stop loading once the request completes
+        setLoading(false);
       }
     };
 
@@ -45,7 +43,6 @@ const AllMentors = () => {
           />
         </div>
 
-        {/* Loading Indicator */}
         {loading ? (
           <div className="flex justify-center my-10">
             <Spin size="large" />

@@ -1,18 +1,9 @@
-import React, { useState } from "react";
-import mentor from '../assets/mentor.png';
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nav } from "../components/Nav";
-import TopMentors from '../components/TopMentors';
+import TopMentors from "../components/TopMentors";
 
 const Home = () => {
-  const [isOpen, setIsOpen] = useState({});
-  const toggleFAQ = (index) => {
-    setIsOpen((prevState) => ({
-      ...prevState,
-      [index]: !prevState[index],
-    }));
-  };
-
   return (
     <>
       <Nav />
@@ -48,15 +39,6 @@ const Home = () => {
             </div>
           </div>
         </section>
-
-        {/* About Section */}
-        {/* ... Keep your existing About Section code unchanged ... */}
-
-        {/* Features Section */}
-        {/* ... Keep your existing Features Section code unchanged ... */}
-
-        {/* How It Works Section */}
-        {/* ... Keep your existing How It Works Section code unchanged ... */}
 
         {/* Mentor Categories Section */}
         <section className="px-8 py-20 bg-gray-100">
@@ -128,18 +110,6 @@ const Home = () => {
             <TopMentors />
           </div>
         </section>
-
-        {/* Pricing Section */}
-        {/* ... Keep your existing Pricing Section code unchanged ... */}
-
-        {/* FAQs Section */}
-        {/* ... Keep your existing FAQ Section code unchanged ... */}
-
-        {/* Call to Action */}
-        {/* ... Keep your existing CTA Section code unchanged ... */}
-
-        {/* Footer */}
-        {/* ... Keep your existing Footer code unchanged ... */}
       </div>
     </>
   );
