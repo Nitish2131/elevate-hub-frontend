@@ -8,4 +8,10 @@ const signin = (data) => {
   return AxiosInstances.post("/auth/signin", data);
 };
 
-export default { signup, signin };
+// ✅ Fix: assign object to variable before default export
+const authAPI = {
+  signup,
+  signin,
+};
+
+export default authAPI;

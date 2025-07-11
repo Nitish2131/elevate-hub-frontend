@@ -12,7 +12,10 @@ const getMentorAvailability = async (mentorId, durationInMinutes = 60) => {
   );
 };
 
-export default {
+// ✅ Fix: assign object to variable before default export
+const availabilityAPI = {
   createAvailability,
   getMentorAvailability,
 };
+
+export default availabilityAPI;

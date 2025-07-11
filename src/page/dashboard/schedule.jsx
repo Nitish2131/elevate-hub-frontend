@@ -56,7 +56,8 @@ const Schedule = () => {
       return;
     }
     fetchAvailability();
-  }, [fetchAvailability]);
+  }, [fetchAvailability, userId]); // ✅ Fixed: added userId to deps
+  
 
   const handleSelectDate = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");

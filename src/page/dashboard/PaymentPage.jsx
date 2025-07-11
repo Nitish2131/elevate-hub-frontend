@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import paymentApi from "../../apiManger/payment"; // Use the default exported API manager
+import paymentApi from "../../apiManger/payment";
 
 const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { date, timeSlot, price } = location.state || {}; // Extract state from location
+  const { date, timeSlot, price } = location.state || {};
 
   const [mobileNumber, setMobileNumber] = useState("");
-  const [orderId, setOrderId] = useState(null);
 
-  // Load Razorpay script if not already loaded
   useEffect(() => {
     if (!window.Razorpay) {
       const script = document.createElement("script");
@@ -29,9 +27,8 @@ const PaymentPage = () => {
     }
 
     try {
-      // Call the API to create an order
       const order = await paymentApi.createOrder({
-        amount: price * 100, // Convert to paise
+        amount: price * 100,
         currency: "INR",
         name: "MentorzHive Booking",
         description: `Payment for slot on ${date} at ${timeSlot}`,
@@ -42,12 +39,9 @@ const PaymentPage = () => {
         return;
       }
 
-      setOrderId(order.order_id);
-
-      // Initialize Razorpay with the order details
       const options = {
-        key: order.key_id, // Razorpay Key ID from the API response
-        amount: price * 100, // Convert amount to paise
+        key: order.key_id,
+        amount: price * 100,
         currency: "INR",
         order_id: order.order_id,
         name: "MentorzHive",
@@ -58,7 +52,6 @@ const PaymentPage = () => {
         handler: async (response) => {
           console.log("Payment successful", response);
 
-          // Verify payment after successful transaction
           const verification = await paymentApi.verifyPayment(response);
           if (verification && verification.success) {
             alert("Payment Verified Successfully!");
@@ -95,7 +88,6 @@ const PaymentPage = () => {
           <p className="text-gray-700 font-medium text-lg">Total Price: ₹{price}</p>
         </div>
 
-        {/* Mobile Number Input */}
         <div className="mt-4">
           <label className="block text-gray-600 font-medium">Enter Mobile Number</label>
           <input
@@ -108,7 +100,6 @@ const PaymentPage = () => {
           />
         </div>
 
-        {/* Payment Button */}
         <button
           onClick={handlePaymentProcess}
           className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
